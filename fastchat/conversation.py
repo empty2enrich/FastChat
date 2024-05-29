@@ -940,6 +940,19 @@ register_conv_template(
     )
 )
 
+# OpenChat 3.6 default template
+register_conv_template(
+    Conversation(
+        name="openchat_3.6",
+        system_template="<|start_header_id|>system<|end_header_id|>\n\n{system_message}<|eot_id|>",
+        roles=("GPT4 Correct User", "GPT4 Correct Assistant"),
+        sep_style=SeparatorStyle.LLAMA3,
+        sep="",
+        stop_str="<|eot_id|>",
+        stop_token_ids=[128001, 128009],
+    )
+)
+
 # TenyxChat default template
 register_conv_template(
     Conversation(
