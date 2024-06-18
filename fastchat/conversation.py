@@ -33,6 +33,7 @@ class SeparatorStyle(IntEnum):
     ROBIN = auto()
     FALCON_CHAT = auto()
     CHATGLM3 = auto()
+    CHATGLM4 = auto()
     DEEPSEEK_CHAT = auto()
     METAMATH = auto()
     YUAN2 = auto()
@@ -198,6 +199,16 @@ class Conversation:
                     ret += role + "\n"
             return ret
         elif self.sep_style == SeparatorStyle.CHATGLM3:
+            ret = ""
+            if self.system_message:
+                ret += system_prompt
+            for role, message in self.messages:
+                if message:
+                    ret += role + "\n" + message
+                else:
+                    ret += role
+            return ret
+        elif self.sep_style == SeparatorStyle.CHATGLM4:
             ret = ""
             if self.system_message:
                 ret += system_prompt
@@ -876,6 +887,21 @@ register_conv_template(
 register_conv_template(
     Conversation(
         name="chatglm3",
+        system_template="<|system|>\n{system_message}",
+        roles=("<|user|>", "<|assistant|>"),
+        sep_style=SeparatorStyle.CHATGLM3,
+        stop_token_ids=[
+            64795,
+            64797,
+            2,
+        ],  # "<|user|>", "<|observation|>", "</s>"
+    )
+)
+
+# ChatGLM4 default template
+register_conv_template(
+    Conversation(
+        name="chatglm4",
         system_template="<|system|>\n{system_message}",
         roles=("<|user|>", "<|assistant|>"),
         sep_style=SeparatorStyle.CHATGLM3,
